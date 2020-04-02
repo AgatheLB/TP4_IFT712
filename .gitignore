@@ -130,3 +130,13 @@ dmypy.json
 
 # MacOs stuff
 .DS_Store
+
+# LateX
+*.aux
+*.dvi
+*.nlo
+*.out
+*.gz
+
+# PyCharm
+.idea
