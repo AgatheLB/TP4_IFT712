@@ -171,8 +171,8 @@ class LinearClassifier(object):
         # Compute gradient
         for k in range(self.num_classes):
             p_k = np.exp(scores[k]) / np.sum(np.exp(scores))
-            dW[:, k] = (p_k - (k == y)) * x.T + reg * np.sum(self.W**2)
-
+            dW[:, k] = (p_k - (k == y)) * x.T
+        dW += 2 * reg * self.W
 
         #############################################################################
         #                          END OF YOUR CODE                                 #
