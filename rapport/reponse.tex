@@ -1,5 +1,69 @@
 % !TeX spellcheck = fr_CA
 \section{Question 1}
-test
+On dispose de l'expression de l'opération Softmax tel que:
+\begin{equation}	
+	y_{w_i}(\overrightarrow{x}) = \frac{e^{a_i}}{\sum_{c=1}^Ke^{a_c}}
+\end{equation}
+Ainsi que de l'expression de la fonction de perte entropie croisée:
+\begin{equation}
+\begin{split}
+	E_D(W) = - \sum_{n=1}^N \sum_{k=1}^K t_{kn} ln (y_{w_i} (\overrightarrow{x_n}))
+\end{split}
+\end{equation}
 
+On calcule le gradient de la fonction de perte par rapport à $a_i$ tel que:
+\begin{equation}
+\begin{split}
+	\frac{\partial E_D(W)}{\partial a_i}  &= \frac{\partial}{\partial a_i} \left(-\sum_{n=1}^N \sum_{k=1}^K t_{kn} ln (y_{w_i} (\overrightarrow{x_n})) \right) \\
+	&= -\sum_{n=1}^N \sum_{k=1}^K t_{kn} \frac{\partial}{\partial a_i} \left(ln (y_{w_i} (\overrightarrow{x_n})) \right) \\
+	&= -\sum_{n=1}^N \sum_{k=1}^K t_{kn} \frac{\partial(ln(y_{w_k}(\overrightarrow{x_n}))}{\partial y_{w_k} \overrightarrow{x_n}} \cdot \frac{\partial y_{w_k} (\overrightarrow{x_n})}{\partial a_i} \\
+	\frac{\partial E_D(W)}{\partial a_i}  &= -\sum_{n=1}^N \sum_{k=1}^K t_{kn} \frac{1}{y_{w_k} (\overrightarrow{x_n})} \cdot \frac{\partial y_{w_k} (\overrightarrow{x_n})}{\partial a_i}
+\end{split}
+\end{equation}
 
+On s'intéresse à la dérivée de l'expression du Softmax:
+\begin{equation}
+\begin{split}
+	\frac{\partial y_{w_i}(\overrightarrow{x})}{\partial a_j} = \frac{\partial}{\partial a_j} \left( \frac{e^{a_i}}{\sum_{c=1}^Ke^{a_c}} \right)
+\end{split}
+\end{equation}
+
+On note:
+\begin{equation}
+\begin{split}
+	g(a) &= e^{a_i} \\
+	h(a) &= \sum_{c=1}^Ke^{a_c}
+\end{split}
+\end{equation}
+
+La dérivée de 
+\begin{equation}
+\begin{split}
+	\frac{\partial y_{w_i}(\overrightarrow{x})} {\partial a_j} = \frac{g^{'}(a) h(a) - g(a) h^{'}(a)} {(h(a))^2}
+\end{split}
+\end{equation}
+
+Calcul de $ \frac{\partial g(a)} {\partial a_j} $:
+\begin{equation}
+\begin{split}
+	 \frac{\partial g(a)} {\partial a_j} &= \frac{\partial e^{a_i}} {\partial a_j} \\
+	 &= \frac{\partial e^{a_i}} {\partial a_i} \cdot \frac{\partial e^{a_i}} {\partial a_j} \\
+	 &= e^{a_i} \cdot \frac{\partial e^{a_i}} {\partial a_j} \\
+	 \frac{\partial g(a)} {\partial a_j} &= 
+	 \begin{cases}
+		 e^{a_i} \text{ si } i=j \\
+		 0 \text{ si } i \neq j
+	 \end{cases} 
+\end{split}
+\end{equation}
+
+Calcul de $ \frac{\partial h(a)} {\partial a_j} $:
+\begin{equation}
+\begin{split}
+	\frac{\partial h(a)} {\partial a_j} &= \frac{\partial}{\partial a_j} (\sum_{c=1}^K e^{a_c}) \\
+	&= \frac{\partial}{\partial a_j}  \left( \sum_{c=1, c \neq j}^K e^{a_c} + e^{a_j} \right) \\
+	&= \frac{\partial}{\partial a_j} \left( \sum_{c=1, c \neq j}^K e^{a_c} + e^{a_j} \right) +  \frac{\partial}{\partial a_j} e^{a_j} \\
+	&= 0 + e^{a_j} \\
+	\frac{\partial h(a)} {\partial a_j} &=  e^{a_j}
+\end{split}
+\end{equation}
