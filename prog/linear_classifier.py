@@ -1,5 +1,5 @@
 import numpy as np
-
+from scipy.special import softmax
 
 class LinearClassifier(object):
     def __init__(self, x_train, y_train, x_val, y_val, num_classes, bias=False):
@@ -92,6 +92,8 @@ class LinearClassifier(object):
         # TODO: Return the best class label.                                        #
         #############################################################################
 
+        class_label = np.argmax(X.dot(self.W), axis=0)
+
         #############################################################################
         #                          END OF YOUR CODE                                 #
         #############################################################################
@@ -114,6 +116,17 @@ class LinearClassifier(object):
         #############################################################################
         # TODO: Compute the softmax loss & accuracy for a series of samples X,y .   #
         #############################################################################
+
+        for n in range(self.num_features):
+            x_n = augment(X[n]) if self.bias else X
+            E_n, dW = self.cross_entropy_loss(x_n, y[n], reg)
+            loss += E_n
+
+            if self.predict(x_n) == y[n]:
+                accu += 1
+
+        loss /= self.num_features
+        accu /= self.num_features
 
         #############################################################################
         #                          END OF YOUR CODE                                 #
@@ -147,6 +160,19 @@ class LinearClassifier(object):
         # 3- Dont forget the regularization!                                        #
         # 4- Compute gradient => eq.(4.109)                                         #
         #############################################################################
+
+        # Compute softmax
+        scores = x.dot(self.W)
+        p = np.exp(scores[y]) / np.sum(np.exp(scores))
+
+        # Compute cross-entropy loss + reg
+        loss = -np.log(p) + reg * np.sum(self.W**2)
+
+        # Compute gradient
+        for k in range(self.num_classes):
+            p_k = np.exp(scores[k]) / np.sum(np.exp(scores))
+            dW[:, k] = (p_k - (k == y)) * x.T + reg * np.sum(self.W**2)
+
 
         #############################################################################
         #                          END OF YOUR CODE                                 #
