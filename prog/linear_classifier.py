@@ -163,9 +163,11 @@ class LinearClassifier(object):
 
         # Compute softmax
         scores = x.dot(self.W)
+        scores -= np.max(scores)  # to avoid overflow in exponential computing
         p = np.exp(scores[y]) / np.sum(np.exp(scores))
 
         # Compute cross-entropy loss + reg
+        p += 1e-9  # to avoid log(0)
         loss = -np.log(p) + reg * np.sum(self.W**2)
 
         # Compute gradient
