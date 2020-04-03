@@ -67,3 +67,34 @@ Calcul de $ \frac{\partial h(a)} {\partial a_j} $:
 	\frac{\partial h(a)} {\partial a_j} &=  e^{a_j}
 \end{split}
 \end{equation}
+
+\section{Question 2}
+On dispose des données telles que:
+$$ \overrightarrow{x_i} = [i, ii, iii, iv, v] $$
+$$ t_i = \{1, 2, 3, 4, 5\} $$ 
+où $\overrightarrow{x_i}$ sont les attributs des données d'entraînement $\overrightarrow{x}$, et $t_i$ les différentes valeurs des cibles associées à une donnée $\overrightarrow{x_i}$.
+
+\subsection{Distribution de vraisemblance}
+La distribution de vraisemblance se définit telle que: 
+$$ P(\overrightarrow{x}, \overrightarrow{t} | \overrightarrow{w}) $$
+où $\overrightarrow{x}$ sont les données d'entraînement connus, $\overrightarrow{t}$ sont les cibles connues associés aux données d'entraînement et  $\overrightarrow{w}$ sont les poids du réseau inconnus que le réseau doit déterminer durant la phase d'entraînement. \\
+On peut également écrire l'expression telle que:
+$$ P((\overrightarrow{x_1}, \overrightarrow{x_2}, ..., \overrightarrow{x_N}), (\overrightarrow{t_1}, \overrightarrow{t_2}, ..., \overrightarrow{t_N}) | \overrightarrow{w_1}, \overrightarrow{w_2}, ..., \overrightarrow{w_N}) $$ 
+
+Afin de déterminer les valeurs des paramètres $\overrightarrow{w}$ du réseau, on peut une méthode d'estimation de maximum de vraisemblance. Les valeurs des paramètres sont trouvées telles que maximisant la probabilité de vraisemblance permettant de produire les données qui sont effectivement observées en entraînement. \\
+Cela s'exprime tel que:
+$$ \overrightarrow{w} = argmax_{\overrightarrow{w}} P(\overrightarrow{x}, \overrightarrow{t} | \overrightarrow{w}) $$
+
+\subsection{Distribution à priori}
+L'expression de la distribution à priori se définit telle que:
+$$ P(\overrightarrow{t})  $$
+que l'on peut également exprimer tel que:
+$$ P(\overrightarrow{t})  = \sum_{\overrightarrow{x}} P(\overrightarrow{x}, \overrightarrow{t}) $$
+En applicant la règle du produit des probabilités, on peut écrire:
+$$ \sum_{\overrightarrow{x}} P(\overrightarrow{x}, \overrightarrow{t}) =  \sum_{\overrightarrow{x}} P(\overrightarrow{x} | \overrightarrow{t}) \cdot P( \overrightarrow{t})$$
+Étant donné que les variables $\overrightarrow{x}$ et $\overrightarrow{t}$ sont des données connues, leur distribution est alors connue. 
+
+\subsection{Hypothèse de distribution gaussienne}
+On considère le problème suivant:
+$$ P(\overrightarrow{x_i} = v | \overrightarrow{t_i} = 1) $$
+\textcolor{red}{TODO}
