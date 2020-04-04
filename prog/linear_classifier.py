@@ -92,7 +92,9 @@ class LinearClassifier(object):
         # TODO: Return the best class label.                                        #
         #############################################################################
 
-        class_label = np.argmax(X.dot(self.W), axis=0)
+        if self.bias and X.ndim > 1:  # augment for generalization
+            X = augment(X)
+        class_label = np.argmax((X.dot(self.W)).T, axis=0)
 
         #############################################################################
         #                          END OF YOUR CODE                                 #
