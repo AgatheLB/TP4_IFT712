@@ -163,6 +163,18 @@ $$ \sum_{\overrightarrow{x}} P(\overrightarrow{x}, \overrightarrow{t}) =  \sum_{
 Étant donné que les variables $\overrightarrow{x}$ et $\overrightarrow{t}$ sont des données connues, leur distribution est alors connue. 
 
 \subsection{Hypothèse de distribution gaussienne}
-On considère le problème suivant:
+On considère le problème suivant que l'on définit tel que la distribution de la consommation d'essence des véhicules en sachant que ceux sont des voitures de sport.
 $$ P(\overrightarrow{x_i} = v | \overrightarrow{t_i} = 1) $$
-\textcolor{red}{TODO}
+De manière générale, nous sommes au fait que la consommation d'essence d'un véhicule dépend de son moteur, de l'essence utilisée et de la conduite adoptée par le chauffeur, entre autres. Les facteurs sont nombreux et il existe donc obligatoirement des variations de consommation d'essence entre les véhicules. Considérant spécifiquement les voitures de sport, leur consommation d'essence n'échappe à ces variations dépendemment des modèles de véhicules. Nous pouvons cependant imaginer sans soucis que leur consommation d'essence est importante de manière globale. Une moyenne élevée de la consommation d'essence pour les voitures de sport est donc tout à fait considérable et une hypothèse est effectivement envisageable.
+
+\section{Question 3}
+On note les expressions de la descente de gradient par momentum telles que:
+\begin{equation}
+\begin{split}
+	v_{t+1} &= \rho \cdot v_t +  \nabla E_{\overrightarrow{x_n}} (w_t) \\
+	w_{t+1} &= w_t + \eta \cdot v_{t+1}
+\end{split}
+\end{equation}
+où $v$ est le terme de vélocité déterminant la direction et la vitesse à laquelle le paramètre $w$ doit être modifié. \\
+$\rho$ peut être défini comme un coefficient de friction influençant directement sur la vitesse. Cet hyper-paramètre décroissant amortit la vitesse et réduit l'énergie cinétique du système dans le but de permettre la détection des minima locaux. \\
+La vitesse du système a, quant à elle, un effet sur la position. Comme $v$ est initialisée à 0 et est un paramètre croissant, l'accélération du système y est alors représenté.
