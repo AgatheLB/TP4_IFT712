@@ -21,6 +21,7 @@ On calcule le gradient de la fonction de perte par rapport à $a_i$ tel que:
 \end{split}
 \end{equation}
 
+\subsubsection{Dérivée du Softmax}
 On s'intéresse à la dérivée de l'expression du Softmax:
 \begin{equation}
 \begin{split}
@@ -67,6 +68,73 @@ Calcul de $ \frac{\partial h(a)} {\partial a_j} $:
 	\frac{\partial h(a)} {\partial a_j} &=  e^{a_j}
 \end{split}
 \end{equation}
+
+On a pu déterminer $g(a)$, sa dérivée, $h(a)$ et sa dérivée, nous pouvons donc maintenant calculer $\frac{\partial y_{w_i}(\overrightarrow{x})} {\partial a_j}$ en considérant deux cas:\\
+\textbf{Pour i=j:}
+\begin{equation}
+\begin{split}
+	\frac{\partial y_{w_i}(\overrightarrow{x})} {\partial a_j} &= \frac{\frac{\partial g(a)} {\partial a_j} \cdot h(a) - g(a) \cdot \frac{\partial h(a)} {\partial a_j}}{h(a)^2} \\
+	&= \frac{(e^{a_i})\cdot(\sum_{c=1}^K e^{a_c}) - (e^{a_i}) \cdot (e^{a_j})}{(\sum_{c=1}^K e^{a_c})^2}
+\end{split}
+\end{equation}
+Étant donné que i=j, on peut réécrire:
+\begin{equation}
+\begin{split}
+&= \frac{(e^{a_i})\cdot(\sum_{c=1}^K e^{a_c}) - (e^{a_i}) \cdot (e^{a_i})}{(\sum_{c=1}^K e^{a_c})^2} \\
+&= \frac{e^{a_i}\left( \sum_{c=1}^K e^{a_c} - e^{a_i} \right)}{(\sum_{c=1}^K e^{a_c})^2} \\
+&= \frac{e^{a_i}}{\sum_{c=1}^K e^{a_c}} \cdot \left(  \frac{\sum_{c=1}^K e^{a_c}}{\sum_{c=1}^K e^{a_c}} - \frac{e^{a_i}}{\sum_{c=1}^K e^{a_c}}\right)
+\end{split}
+\end{equation}
+On reconnaît l'expression de $ y_{\overrightarrow{w_i}}(\overrightarrow{x}) $, 
+\begin{equation}
+\begin{split}
+\frac{\partial y_{w_i}(\overrightarrow{x})} {\partial a_j} &=  y_{\overrightarrow{w_i}}(\overrightarrow{x}) \cdot \left(1-y_{\overrightarrow{w_i}}(\overrightarrow{x}) \right)
+\end{split}
+\end{equation}
+pour i = j.
+
+\textbf{Pour i$\neq$ j:}
+\begin{equation}
+\begin{split}
+\frac{\partial y_{w_i}(\overrightarrow{x})} {\partial a_j} &= \frac{\frac{\partial g(a)} {\partial a_j} \cdot h(a) - g(a) \cdot \frac{\partial h(a)} {\partial a_j}}{h(a)^2} \\
+&= \frac{0 \cdot (\sum_{c=1}^K e^{a_c}) - (e^{a_i}) \cdot (e^{a_j})}{(\sum_{c=1}^K e^{a_c})^2} \\
+&= - \frac{e^{a_i}\cdot e^{a_j}}{(\sum_{c=1}^K e^{a_c})^2} \\
+&= - \frac{e^{a_i}}{\sum_{c=1}^K e^{a_c}} \cdot \frac{e^{a_j}}{\sum_{c=1}^K e^{a_c}}
+\end{split}
+\end{equation}
+On reconnaît les expressions de  $ y_{\overrightarrow{w_i}}(\overrightarrow{x}) $ et $ y_{\overrightarrow{w_j}}(\overrightarrow{x}) $.
+
+\begin{equation}
+\begin{split}
+\frac{\partial y_{w_i}(\overrightarrow{x})} {\partial a_j} &= - y_{\overrightarrow{w_i}}(\overrightarrow{x}) \cdot y_{\overrightarrow{w_j}}(\overrightarrow{x})
+\end{split}
+\end{equation}
+pour $i\neq j$.
+
+\subsubsection{Suite de la dérivée de l'entropie croisée}
+Nous avions trouvé l'expression suivante:
+\begin{equation}
+\begin{split}
+	\frac{\partial E_D(W)}{\partial a_i}  &= -\sum_{n=1}^N \sum_{k=1}^K \frac{t_{kn}}{y_{w_k} (\overrightarrow{x_n})} \cdot \frac{\partial y_{w_k} (\overrightarrow{x_n})}{\partial a_i}
+\end{split}
+\end{equation}
+On considère les deux cas, tel que $i=j$ et $i\neq j$ et on remplace les dérivées des softmax précédemment trouvées:
+\begin{equation}
+\begin{split}
+\frac{\partial E_D(W)}{\partial a_i}  &= -\sum_{n=1}^N \left[ \frac{t_{in}}{\cancel{y_{\overrightarrow{w_i}}(\overrightarrow{x})}} \cdot \left( \cancel{y_{\overrightarrow{w_i}}(\overrightarrow{x_n})}(1-y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) \right) + \sum_{k=1, k\neq i} \frac{t_{kn}}{\cancel{y_{\overrightarrow{w_k}}(\overrightarrow{x_n})}} \cdot \left( -y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) \cdot \cancel{y_{\overrightarrow{w_k}}(\overrightarrow{x_n})}) \right)\right]\\
+&= -\sum_{n=1}^N \left[ t_{in} \left( 1-y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) \right) - \sum_{k=1, k\neq i} t_{kn} \cdot y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) \right] \\
+&= -\sum_{n=1}^N \left[ t_{in} - t_{in} \cdot y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) - \sum_{k=1, k\neq i} t_{kn} \cdot y_{\overrightarrow{w_i}}(\overrightarrow{x_n})  \right] \\
+&= -\sum_{n=1}^N  \left[ t_{in} - y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) \left( t_{in} + \sum_{k=1, k\neq i} t_{kn} \right) \right]\\
+&= -\sum_{n=1}^N \left[ t_{in} - y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) \cdot \left(  \sum_{k=1}^K t_{kn} \right)  \right]
+\end{split}
+\end{equation}
+Or on sait que $\sum_{k=1}^K t_{kn} = 1$, on peut donc écrire:
+\begin{equation}
+\begin{split}
+\frac{\partial E_D(W)}{\partial a_i}  &=  \sum_{n=1}^N (y_{\overrightarrow{w_i}}(\overrightarrow{x_n}) -  t_{in})
+\end{split}
+\end{equation}
+
 
 \section{Question 2}
 On dispose des données telles que:
